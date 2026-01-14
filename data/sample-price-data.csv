@@ -1,0 +1,7 @@
+date,mandi_name,mandi_code,crop,variety,min_price,max_price,modal_price,volume_quintals
+2025-01-10,Akola,MH001,Cotton,Medium Staple,5800,6200,6000,1250
+2025-01-10,Nagpur,MH002,Cotton,Medium Staple,5900,6300,6100,980
+2025-01-09,Akola,MH001,Cotton,Medium Staple,5750,6150,5950,1180
+2025-01-09,Nagpur,MH002,Cotton,Medium Staple,5850,6250,6050,1020
+2025-01-08,Akola,MH001,Cotton,Medium Staple,5700,6100,5900,1340
+2025-01-08,Nagpur,MH002,Cotton,Medium Staple,5800,6200,6000,950

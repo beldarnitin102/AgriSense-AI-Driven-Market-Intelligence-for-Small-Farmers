@@ -1,0 +1,108 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Farmer Market Intelligence Platform
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: python3.11
+    MemorySize: 512
+    Environment:
+      Variables:
+        PRICE_DATA_BUCKET: !Ref PriceDataBucket
+        DYNAMODB_TABLE: !Ref QueryLogsTable
+
+Resources:
+  # API Gateway
+  FarmerMarketAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+        AllowOrigin: "'*'"
+
+  # Lambda Functions
+  GetRecommendationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/get_recommendation/
+      Handler: app.lambda_handler
+      Events:
+        GetRecommendation:
+          Type: Api
+          Properties:
+            RestApiId: !Ref FarmerMarketAPI
+            Path: /recommendation
+            Method: post
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref PriceDataBucket
+        - DynamoDBCrudPolicy:
+            TableName: !Ref QueryLogsTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+              Resource: '*'
+
+  GetAnalyticsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/get_analytics/
+      Handler: app.lambda_handler
+      Events:
+        GetAnalytics:
+          Type: Api
+          Properties:
+            RestApiId: !Ref FarmerMarketAPI
+            Path: /analytics
+            Method: get
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref PriceDataBucket
+        - DynamoDBReadPolicy:
+            TableName: !Ref QueryLogsTable
+
+  # S3 Bucket for Price Data
+  PriceDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'farmer-market-data-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # DynamoDB Table
+  QueryLogsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: FarmerMarketQueryLogs
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: N
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint URL
+    Value: !Sub 'https://${FarmerMarketAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/'
+  
+  PriceDataBucketName:
+    Description: S3 bucket for price data
+    Value: !Ref PriceDataBucket

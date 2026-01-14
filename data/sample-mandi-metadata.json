@@ -1,0 +1,72 @@
+{
+  "state": "Maharashtra",
+  "mandis": [
+    {
+      "code": "MH001",
+      "name": "Akola APMC",
+      "district": "Akola",
+      "latitude": 20.7002,
+      "longitude": 77.0082,
+      "crops_traded": [
+        "Cotton",
+        "Soybean",
+        "Wheat"
+      ],
+      "facilities": [
+        "weighbridge",
+        "storage"
+      ],
+      "contact": "+91-724-xxx-xxxx",
+      "operating_days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Friday"
+      ]
+    },
+    {
+      "code": "MH002",
+      "name": "Nagpur Market",
+      "district": "Nagpur",
+      "latitude": 21.1458,
+      "longitude": 79.0882,
+      "crops_traded": [
+        "Cotton",
+        "Wheat",
+        "Onion"
+      ],
+      "facilities": [
+        "weighbridge",
+        "cold_storage"
+      ],
+      "contact": "+91-712-xxx-xxxx",
+      "operating_days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ]
+    },
+    {
+      "code": "MH003",
+      "name": "Amravati APMC",
+      "district": "Amravati",
+      "latitude": 20.9374,
+      "longitude": 77.7796,
+      "crops_traded": [
+        "Cotton",
+        "Soybean"
+      ],
+      "facilities": [
+        "weighbridge"
+      ],
+      "contact": "+91-721-xxx-xxxx",
+      "operating_days": [
+        "Monday",
+        "Wednesday",
+        "Friday"
+      ]
+    }
+  ]
+}
